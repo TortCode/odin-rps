@@ -11,9 +11,16 @@ function getComputerChoice() {
 }
 
 const resultContainer = document.querySelector("#result");
+const scoreContainer = document.querySelector("#score");
 
 let humanScore = 0;
 let computerScore = 0;
+
+let isGameDone = false;
+
+function displayScore() {
+    scoreContainer.innerHTML = `<strong>Human:</strong> ${humanScore} <strong>Computer:</strong> ${computerScore}`;
+}
 
 function playRound(humanChoice, computerChoice) {
     if (humanChoice === computerChoice) {
@@ -29,20 +36,22 @@ function playRound(humanChoice, computerChoice) {
         resultContainer.textContent = `You lose! ${computerChoice} beats ${humanChoice}`;
         computerScore++;
     }
-}
-
-function declareResult() {
-    if (humanScore === computerScore) {
-        resultContainer.textContent = "The game's a tie!";
-    } else if (humanScore > computerScore) {
+    displayScore();
+    if (humanScore === 5) {
+        isGameDone = true;
         resultContainer.textContent = "You win the game!";
-    } else {
+    }
+    if (computerScore === 5) {
+        isGameDone = true;
         resultContainer.textContent = "You lose the game!";
     }
 }
 
 const buttonList = document.querySelector("#button-list")
 buttonList.addEventListener("click", (e) => {
+    if (isGameDone) {
+        return;
+    }
     const humanChoice = e.target.id;
     if (!(humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors")) {
         return;
@@ -51,3 +60,5 @@ buttonList.addEventListener("click", (e) => {
     const computerChoice = getComputerChoice();
     playRound(humanChoice, computerChoice);
 })
+
+displayScore();
